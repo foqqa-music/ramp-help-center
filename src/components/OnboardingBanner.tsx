@@ -32,13 +32,13 @@ export const OnboardingBanner = () => {
               On-demand resources
             </a>
           </Button>
-          <Button variant="outline" className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground gap-2" asChild>
-            <a href="https://community.ramp.com/" target="_blank" rel="noopener noreferrer">
+          <a href="https://community.ramp.com/" target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground gap-2">
               <Users className="w-4 h-4" />
               Community forum
               <ExternalLink className="w-3 h-3" />
-            </a>
-          </Button>
+            </Button>
+          </a>
         </div>
       </div>
     </motion.div>
