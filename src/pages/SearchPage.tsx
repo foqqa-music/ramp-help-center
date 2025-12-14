@@ -4,12 +4,13 @@ import { motion } from 'framer-motion';
 import { Filter, X } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { SearchBar } from '@/components/SearchBar';
-import { AIAnswerBox } from '@/components/AIAnswerBox';
+import { AISearchAnswer } from '@/components/AISearchAnswer';
 import { ArticleCard } from '@/components/ArticleCard';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { searchArticles, articles, AudienceType } from '@/data/articles';
 import { usePersona, getRoleLabel, RoleType } from '@/contexts/PersonaContext';
+import { useAISearch } from '@/hooks/useAISearch';
 
 const audienceFilters: { value: AudienceType; label: string }[] = [
   { value: 'employee', label: 'Employee' },
@@ -33,6 +34,7 @@ const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
   const { persona, isExploring } = usePersona();
+  const { search, isLoading, error, result } = useAISearch();
   
   const [selectedAudience, setSelectedAudience] = useState<AudienceType | null>(
     isExploring ? null : (persona.role as AudienceType)
@@ -46,6 +48,13 @@ const SearchPage = () => {
       setSelectedAudience(persona.role as AudienceType);
     }
   }, [persona, isExploring]);
+
+  // Trigger AI search when query changes
+  useEffect(() => {
+    if (query.trim()) {
+      search(query);
+    }
+  }, [query]);
 
   const filteredArticles = useMemo(() => {
     let results = query 
@@ -88,6 +97,11 @@ const SearchPage = () => {
           </h1>
           <SearchBar initialQuery={query} onSearch={handleSearch} />
         </motion.div>
+
+        {/* AI Answer Section */}
+        {query && (
+          <AISearchAnswer result={result} isLoading={isLoading} error={error} />
+        )}
 
         {/* Filters */}
         <motion.div
@@ -207,9 +221,13 @@ const SearchPage = () => {
           )}
         </motion.div>
 
-        {/* AI Answer Box */}
-        {query && filteredArticles.length > 0 && (
-          <AIAnswerBox query={query} articles={filteredArticles} />
+        {/* Local Articles Section */}
+        {filteredArticles.length > 0 && (
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-foreground mb-4">
+              {query ? 'Related Articles' : 'All Articles'}
+            </h2>
+          </div>
         )}
 
         {/* Results */}
