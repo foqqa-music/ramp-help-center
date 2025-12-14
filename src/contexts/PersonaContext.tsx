@@ -6,6 +6,9 @@ export type PlanType = 'free' | 'plus' | 'enterprise';
 export interface Persona {
   role: RoleType;
   plan?: PlanType;
+  company?: string;
+  industry?: string;
+  identified?: boolean;
 }
 
 interface PersonaContextType {
@@ -13,6 +16,8 @@ interface PersonaContextType {
   setPersona: (persona: Persona) => void;
   clearPersona: () => void;
   isExploring: boolean;
+  isIdentifying: boolean;
+  setIsIdentifying: (value: boolean) => void;
 }
 
 const PersonaContext = createContext<PersonaContextType | undefined>(undefined);
@@ -31,6 +36,7 @@ export const PersonaProvider: React.FC<{ children: ReactNode }> = ({ children })
     }
     return { role: 'exploring' };
   });
+  const [isIdentifying, setIsIdentifying] = useState(true);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(persona));
@@ -47,7 +53,7 @@ export const PersonaProvider: React.FC<{ children: ReactNode }> = ({ children })
   const isExploring = persona.role === 'exploring';
 
   return (
-    <PersonaContext.Provider value={{ persona, setPersona, clearPersona, isExploring }}>
+    <PersonaContext.Provider value={{ persona, setPersona, clearPersona, isExploring, isIdentifying, setIsIdentifying }}>
       {children}
     </PersonaContext.Provider>
   );
