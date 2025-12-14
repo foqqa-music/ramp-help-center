@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, LucideIcon } from 'lucide-react';
+import { ArrowRight, ExternalLink, LucideIcon } from 'lucide-react';
 
 interface ResourceCardProps {
   title: string;
@@ -8,9 +8,30 @@ interface ResourceCardProps {
   icon: LucideIcon;
   href: string;
   delay?: number;
+  external?: boolean;
 }
 
-export const ResourceCard = ({ title, description, icon: Icon, href, delay = 0 }: ResourceCardProps) => {
+export const ResourceCard = ({ title, description, icon: Icon, href, delay = 0, external = false }: ResourceCardProps) => {
+  const cardContent = (
+    <>
+      <div className="flex items-start justify-between mb-4">
+        <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center">
+          <Icon className="w-6 h-6 text-accent" />
+        </div>
+        <div className="text-secondary-foreground/60 group-hover:text-accent transition-colors">
+          {external ? <ExternalLink className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
+        </div>
+      </div>
+      
+      <h3 className="font-semibold text-lg text-secondary-foreground mb-2">
+        {title}
+      </h3>
+      <p className="text-sm text-secondary-foreground/70 flex-1">
+        {description}
+      </p>
+    </>
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -19,30 +40,23 @@ export const ResourceCard = ({ title, description, icon: Icon, href, delay = 0 }
       whileHover={{ scale: 1.02 }}
       className="group"
     >
-      <Link
-        to={href}
-        className="flex flex-col h-full bg-gradient-card rounded-2xl p-6 border border-border/20 shadow-lg hover:shadow-xl transition-all duration-300"
-      >
-        <div className="flex items-start justify-between mb-4">
-          <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center">
-            <Icon className="w-6 h-6 text-accent" />
-          </div>
-          <motion.div
-            initial={{ x: 0 }}
-            whileHover={{ x: 4 }}
-            className="text-secondary-foreground/60 group-hover:text-accent transition-colors"
-          >
-            <ArrowRight className="w-5 h-5" />
-          </motion.div>
-        </div>
-        
-        <h3 className="font-semibold text-lg text-secondary-foreground mb-2">
-          {title}
-        </h3>
-        <p className="text-sm text-secondary-foreground/70 flex-1">
-          {description}
-        </p>
-      </Link>
+      {external ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col h-full bg-gradient-card rounded-2xl p-6 border border-border/20 shadow-lg hover:shadow-xl transition-all duration-300"
+        >
+          {cardContent}
+        </a>
+      ) : (
+        <Link
+          to={href}
+          className="flex flex-col h-full bg-gradient-card rounded-2xl p-6 border border-border/20 shadow-lg hover:shadow-xl transition-all duration-300"
+        >
+          {cardContent}
+        </Link>
+      )}
     </motion.div>
   );
 };
