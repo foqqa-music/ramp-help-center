@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronDown, User, Building2, Store, Compass } from 'lucide-react';
+import { ChevronDown, User, Building2, Store, Compass, ExternalLink } from 'lucide-react';
 import rampLogo from '@/assets/ramp-logo.png';
 import { usePersona, getRoleLabel, getPlanLabel, RoleType } from '@/contexts/PersonaContext';
 import {
@@ -13,8 +13,11 @@ import {
 import { Button } from '@/components/ui/button';
 
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/search', label: 'Browse Articles' },
+  { href: '/', label: 'Help Center', external: false },
+  { href: 'https://support.ramp.com/hc/en-us/categories/4669349730963-Guides-by-topic', label: 'Guides By Topic', external: true },
+  { href: 'https://support.ramp.com/hc/en-us/requests/new', label: 'Contact Support', external: true },
+  { href: 'https://support.ramp.com/hc/en-us/categories/4408650449043-About-Ramp', label: 'About Ramp', external: true },
+  { href: 'https://ramp.com/training#live-webinars', label: 'Live Training', external: true },
 ];
 
 const personaOptions: { role: RoleType; icon: React.ElementType; label: string }[] = [
@@ -39,23 +42,36 @@ export const Header = () => {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2">
-            <img src={rampLogo} alt="Ramp" className="h-9 w-9 rounded-full object-cover aspect-square" />
-            <span className="text-xl font-bold text-foreground">Help Center</span>
+            <span className="text-xl font-bold text-foreground">ramp</span>
+            <img src={rampLogo} alt="Ramp" className="h-6 w-6 object-contain" />
           </Link>
           
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  location.pathname === link.href
-                    ? 'bg-muted text-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                }`}
-              >
-                {link.label}
-              </Link>
+              link.external ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-lg text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:bg-muted/50 flex items-center gap-1"
+                >
+                  {link.label}
+                  {link.label === 'Live Training' && <ExternalLink className="h-3 w-3" />}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    location.pathname === link.href
+                      ? 'bg-muted text-foreground'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              )
             ))}
           </nav>
         </div>
