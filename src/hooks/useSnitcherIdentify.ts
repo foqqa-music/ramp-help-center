@@ -1,26 +1,27 @@
 import { useEffect, useRef } from 'react';
 import { usePersona } from '@/contexts/PersonaContext';
+import { supabase } from '@/integrations/supabase/client';
 
-declare global {
-  interface Window {
-    Snitcher?: {
-      on: (event: string, callback: (data: SnitcherData) => void) => void;
-      off: (event: string, callback: (data: SnitcherData) => void) => void;
-    };
-  }
+interface SnitcherCompany {
+  name: string | null;
+  industry: string | null;
+  size: string | null;
+  domain: string | null;
+  logo: string | null;
 }
 
-interface SnitcherData {
-  company?: {
-    name: string;
-    industry?: string;
-  };
+interface SnitcherResponse {
+  identified: boolean;
+  company?: SnitcherCompany;
+  reason?: string;
+  error?: string;
 }
 
 export const useSnitcherIdentify = () => {
   const { persona, setPersona, setIsIdentifying } = usePersona();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hasIdentifiedRef = useRef(false);
+  const hasCalledRef = useRef(false);
 
   useEffect(() => {
     // Don't re-identify if already identified or if user already selected a persona
@@ -29,22 +30,49 @@ export const useSnitcherIdentify = () => {
       return;
     }
 
-    const handleIdentify = (data: SnitcherData) => {
-      if (data.company && !hasIdentifiedRef.current) {
-        hasIdentifiedRef.current = true;
+    // Prevent duplicate calls
+    if (hasCalledRef.current) return;
+    hasCalledRef.current = true;
+
+    const identifyVisitor = async () => {
+      try {
+        console.log('Calling identifyVisitor edge function...');
         
-        // Clear the timeout since we got a response
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
+        const { data, error } = await supabase.functions.invoke<SnitcherResponse>('identifyVisitor', {
+          body: {},
+        });
+
+        console.log('identifyVisitor response:', data, error);
+
+        if (error) {
+          console.error('Edge function error:', error);
+          setIsIdentifying(false);
+          return;
         }
 
-        setPersona({
-          role: 'employee',
-          plan: 'plus',
-          company: data.company.name,
-          industry: data.company.industry,
-          identified: true,
-        });
+        if (data?.identified && data.company?.name && !hasIdentifiedRef.current) {
+          hasIdentifiedRef.current = true;
+          
+          // Clear the timeout since we got a response
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+          }
+
+          setPersona({
+            role: 'employee', // Auto-select customer type
+            plan: 'plus',
+            company: data.company.name,
+            industry: data.company.industry || undefined,
+            size: data.company.size || undefined,
+            identified: true,
+          });
+          setIsIdentifying(false);
+        } else {
+          console.log('No company identified:', data?.reason);
+          setIsIdentifying(false);
+        }
+      } catch (err) {
+        console.error('Error calling identifyVisitor:', err);
         setIsIdentifying(false);
       }
     };
@@ -52,39 +80,25 @@ export const useSnitcherIdentify = () => {
     // Set up the 3-second timeout fallback
     timeoutRef.current = setTimeout(() => {
       if (!hasIdentifiedRef.current) {
+        console.log('Identification timeout - falling back to manual selection');
         setIsIdentifying(false);
       }
-    }, 3000);
+    }, 5000);
 
-    // Listen for Snitcher identify event
-    if (window.Snitcher) {
-      window.Snitcher.on('identify', handleIdentify);
-    } else {
-      // If Snitcher isn't loaded yet, wait for it
-      const checkInterval = setInterval(() => {
-        if (window.Snitcher) {
-          window.Snitcher.on('identify', handleIdentify);
-          clearInterval(checkInterval);
-        }
-      }, 100);
-
-      // Clean up interval after 3 seconds
-      setTimeout(() => clearInterval(checkInterval), 3000);
-    }
+    // Call the edge function
+    identifyVisitor();
 
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-      if (window.Snitcher) {
-        window.Snitcher.off('identify', handleIdentify);
-      }
     };
-  }, [persona.identified, persona.role, setPersona, setIsIdentifying]);
+  }, [persona.identified, persona.hasSelected, setPersona, setIsIdentifying]);
 
   return {
     isIdentified: persona.identified || false,
     company: persona.company,
     industry: persona.industry,
+    size: persona.size,
   };
 };
