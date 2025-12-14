@@ -110,9 +110,8 @@ const Index = () => {
               title="Guides by Topic"
               description="FAQs and best practices for using the platform effectively"
               icon={FileText}
-              href="https://support.ramp.com/hc/en-us/categories/4669349730963-Guides-by-topic"
+              href="/guides"
               delay={0.6}
-              external
             />
           </div>
         </section>
