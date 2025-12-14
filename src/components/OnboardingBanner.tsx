@@ -20,18 +20,24 @@ export const OnboardingBanner = () => {
         </p>
         
         <div className="flex flex-wrap gap-3">
-          <Button variant="accent" className="gap-2">
-            <Play className="w-4 h-4" />
-            Live training
+          <Button variant="accent" className="gap-2" asChild>
+            <a href="https://ramp.com/training#live-webinars" target="_blank" rel="noopener noreferrer">
+              <Play className="w-4 h-4" />
+              Live training
+            </a>
           </Button>
-          <Button variant="outline" className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground gap-2">
-            <BookOpen className="w-4 h-4" />
-            On-demand resources
+          <Button variant="outline" className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground gap-2" asChild>
+            <a href="https://ramp.com/training" target="_blank" rel="noopener noreferrer">
+              <BookOpen className="w-4 h-4" />
+              On-demand resources
+            </a>
           </Button>
-          <Button variant="outline" className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground gap-2">
-            <Users className="w-4 h-4" />
-            Community forum
-            <ExternalLink className="w-3 h-3" />
+          <Button variant="outline" className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground gap-2" asChild>
+            <a href="https://community.ramp.com/" target="_blank" rel="noopener noreferrer">
+              <Users className="w-4 h-4" />
+              Community forum
+              <ExternalLink className="w-3 h-3" />
+            </a>
           </Button>
         </div>
       </div>

@@ -102,15 +102,17 @@ const Index = () => {
               title="About Ramp"
               description="Find out more about joining Ramp and how our platform can help your business"
               icon={Building2}
-              href="/search?q=about"
+              href="https://support.ramp.com/hc/en-us/categories/4408650449043-About-Ramp"
               delay={0.5}
+              external
             />
             <ResourceCard
               title="Guides by Topic"
               description="FAQs and best practices for using the platform effectively"
               icon={FileText}
-              href="/search"
+              href="https://support.ramp.com/hc/en-us/categories/4669349730963-Guides-by-topic"
               delay={0.6}
+              external
             />
           </div>
         </section>
