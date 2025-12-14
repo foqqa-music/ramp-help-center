@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 
 const navLinks = [
   { href: '/', label: 'Help Center', external: false },
-  { href: 'https://support.ramp.com/hc/en-us/categories/4669349730963-Guides-by-topic', label: 'Guides By Topic', external: true },
+  { href: '/guides', label: 'Guides By Topic', external: false },
   { href: 'https://support.ramp.com/hc/en-us/requests/new', label: 'Contact Support', external: true },
   { href: 'https://support.ramp.com/hc/en-us/categories/4408650449043-About-Ramp', label: 'About Ramp', external: true },
   { href: 'https://ramp.com/training#live-webinars', label: 'Live Training', external: true },

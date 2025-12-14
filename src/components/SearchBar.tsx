@@ -7,9 +7,10 @@ interface SearchBarProps {
   initialQuery?: string;
   size?: 'default' | 'large';
   onSearch?: (query: string) => void;
+  placeholder?: string;
 }
 
-export const SearchBar = ({ initialQuery = '', size = 'default', onSearch }: SearchBarProps) => {
+export const SearchBar = ({ initialQuery = '', size = 'default', onSearch, placeholder = 'Ask anything...' }: SearchBarProps) => {
   const [query, setQuery] = useState(initialQuery);
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export const SearchBar = ({ initialQuery = '', size = 'default', onSearch }: Sea
         
         <input
           type="text"
-          placeholder="Ask anything..."
+          placeholder={placeholder}
           className={`flex-1 outline-none bg-transparent text-foreground placeholder:text-muted-foreground ${
             isLarge ? 'text-lg ml-4' : 'text-base ml-3'
           }`}
