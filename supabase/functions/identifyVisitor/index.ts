@@ -59,14 +59,13 @@ serve(async (req) => {
 
     console.log(`Looking up IP: ${visitorIp}`);
 
-    // Call Snitcher API
-    const snitcherResponse = await fetch('https://app.snitcher.com/api/v2/lookup', {
+    // Call Snitcher API - correct endpoint per docs
+    const snitcherResponse = await fetch(`https://api.snitcher.com/company/find?ip=${encodeURIComponent(visitorIp)}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${snitcherApiKey}`,
-        'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
-      body: JSON.stringify({ ip: visitorIp }),
     });
 
     if (!snitcherResponse.ok) {
@@ -89,7 +88,7 @@ serve(async (req) => {
           company: {
             name: snitcherData.company.name || null,
             industry: snitcherData.company.industry || null,
-            size: snitcherData.company.size || snitcherData.company.employee_count_range || null,
+            size: snitcherData.company.employee_range || snitcherData.company.size || null,
             domain: snitcherData.company.domain || null,
             logo: snitcherData.company.logo || null,
           },
