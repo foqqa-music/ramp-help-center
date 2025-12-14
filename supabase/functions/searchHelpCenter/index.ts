@@ -43,7 +43,7 @@ serve(async (req) => {
     console.log("Searching Zendesk Help Center for:", query);
 
     // Step 1: Call Zendesk Help Center API
-    const zendeskUrl = `https://ramp.zendesk.com/api/v2/help_center/articles/search?query=${encodeURIComponent(query)}`;
+    const zendeskUrl = `https://support.ramp.com/api/v2/help_center/articles/search?query=${encodeURIComponent(query)}`;
     
     const zendeskResponse = await fetch(zendeskUrl, {
       method: "GET",
