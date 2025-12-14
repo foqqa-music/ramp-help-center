@@ -126,9 +126,9 @@ const GuidesPage = () => {
                     
                     <Link
                       to="/search"
-                      className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-accent hover:text-accent/80 transition-colors"
+                      className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-[#1C6B5A] hover:text-[#145547] transition-colors"
                     >
-                      See all {category.articles.length} article{category.articles.length !== 1 ? 's' : ''}
+                      See all articles
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </motion.div>
