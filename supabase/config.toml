@@ -1,1 +1,4 @@
 project_id = "qaxwvbgnefzfjwpzzvks"
+
+[functions.searchHelpCenter]
+verify_jwt = false
