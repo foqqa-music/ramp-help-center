@@ -39,7 +39,7 @@ export const Header = () => {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2">
-            <img src={rampLogo} alt="Ramp" className="h-9 w-9" />
+            <img src={rampLogo} alt="Ramp" className="h-9 w-9 rounded-full object-cover aspect-square" />
             <span className="text-xl font-bold text-foreground">Help Center</span>
           </Link>
           
