@@ -9,6 +9,7 @@ export interface Persona {
   company?: string;
   industry?: string;
   identified?: boolean;
+  hasSelected?: boolean;
 }
 
 interface PersonaContextType {
@@ -16,6 +17,7 @@ interface PersonaContextType {
   setPersona: (persona: Persona) => void;
   clearPersona: () => void;
   isExploring: boolean;
+  hasSelectedPersona: boolean;
   isIdentifying: boolean;
   setIsIdentifying: (value: boolean) => void;
 }
@@ -43,17 +45,18 @@ export const PersonaProvider: React.FC<{ children: ReactNode }> = ({ children })
   }, [persona]);
 
   const setPersona = (newPersona: Persona) => {
-    setPersonaState(newPersona);
+    setPersonaState({ ...newPersona, hasSelected: true });
   };
 
   const clearPersona = () => {
-    setPersonaState({ role: 'exploring' });
+    setPersonaState({ role: 'exploring', hasSelected: false });
   };
 
   const isExploring = persona.role === 'exploring';
+  const hasSelectedPersona = persona.hasSelected || false;
 
   return (
-    <PersonaContext.Provider value={{ persona, setPersona, clearPersona, isExploring, isIdentifying, setIsIdentifying }}>
+    <PersonaContext.Provider value={{ persona, setPersona, clearPersona, isExploring, hasSelectedPersona, isIdentifying, setIsIdentifying }}>
       {children}
     </PersonaContext.Provider>
   );
