@@ -8,6 +8,7 @@ export interface Persona {
   plan?: PlanType;
   company?: string;
   industry?: string;
+  size?: string;
   identified?: boolean;
   hasSelected?: boolean;
 }
