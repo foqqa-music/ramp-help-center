@@ -43,7 +43,7 @@ export const Header = () => {
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2">
             <span className="text-xl font-bold text-foreground">ramp</span>
-            <img src={rampLogo} alt="Ramp" className="h-8 w-8 object-contain" />
+            <img src={rampLogo} alt="Ramp" className="h-10 w-10 object-contain" />
           </Link>
           
           <nav className="hidden lg:flex items-center gap-1">
