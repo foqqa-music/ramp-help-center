@@ -24,7 +24,7 @@ export const useSnitcherIdentify = () => {
 
   useEffect(() => {
     // Don't re-identify if already identified or if user already selected a persona
-    if (persona.identified || persona.role !== 'exploring') {
+    if (persona.identified || persona.hasSelected) {
       setIsIdentifying(false);
       return;
     }

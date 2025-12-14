@@ -32,12 +32,13 @@ const options: PersonaOption[] = [
 ];
 
 export const PersonaSelector = () => {
-  const { setPersona, isExploring, isIdentifying } = usePersona();
+  const { setPersona, hasSelectedPersona, isIdentifying } = usePersona();
   
   // Initialize Snitcher identification
   useSnitcherIdentify();
 
-  if (!isExploring) return null;
+  // Hide selector if user has already made a selection (including "exploring")
+  if (hasSelectedPersona) return null;
 
   return (
     <motion.div
